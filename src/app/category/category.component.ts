@@ -165,5 +165,5 @@ delete(id){
   close(){
     this.isFormSubmitted = null;
     this.category = new category();
-  }
-}
+  };
+};
