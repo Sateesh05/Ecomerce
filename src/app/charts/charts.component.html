@@ -1,0 +1,16 @@
+
+<div class='container'>
+    <div style="width: 80%;">
+        <canvas
+            baseChart
+            [chartType]="'line'"
+            [datasets]="chartData"
+            [labels]="chartLabels"
+            [options]="chartOptions"
+            [legend]="true"
+            (chartClick)="onChartClick($event)">
+        </canvas>
+    </div>
+    <button class="btn btn-primary   glyph bt-sm float-right" style='margin-right: 100px;cursor: pointer;background-color: hotpink;border-color: hotpink;'
+    (click)='back()'>Back</button>
+</div>

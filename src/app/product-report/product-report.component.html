@@ -1,0 +1,142 @@
+<div class='container'>
+    <table class='selectboxtable' width='100%'>
+      <tr>
+        <td style="width:280px">
+          <label><b>Select Product:</b></label>
+          <select class='selectpicker bgcolor' data-style="btn-info" id='selectItemid' [(ngModel)]='productqueryParm.productId'>
+            <option value="{{0}}" selected>All</option>
+            <option *ngFor='let item of productRecords' value="{{item.id}}">{{item.name}}</option>
+          </select>
+        </td>
+        <td style="width:280px">
+          <label><b>Select From date:</b></label>
+          <input class='selectpicker inputbox' type='date'  id='fromDate' [(ngModel)]="productqueryParm.fromDate" >
+            
+        </td>
+        <td style="width:280px">
+          <label><b>Select To date:</b></label>
+          <input class='selectpicker inputbox' type='date'  id='toDate' [(ngModel)]="productqueryParm.toDate" >
+            
+        </td>
+        <td>
+          <button
+            style='background-color: #b0e0e6;margin-top: 28px;padding: 4px 6px;border-color: rgb(49, 47, 47);color: black;'
+            class="btn btn-info" (click)='Search()'>Go</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  <!--Grid View-->
+  <br>
+  <div class='container'>
+    <div>
+      <table class="table table-bordered
+          table-hover
+          table-stripped
+          table-condensed">
+        <thead style="background-color: rgb(22, 155, 22);color: white;">
+          <tr>
+            <th>S.no</th>
+            <th>Order Code</th>
+            <th>Customer Name</th>
+            <th>Contact No</th>
+            <th>Order Date</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let item of receivedOrderByproduct|paginate:config;'>
+            <td>{{item.sno}}</td>
+            <td>{{item.orderCode}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.contactNo}}</td>
+            <td>{{item.orderdate|date:short}}</td>
+            <td>
+              <button style='outline: none;border: none;' class='mat-icon-button' (click)="ViewOrderDetail(item.id)">
+                <mat-icon color="primary" class="mat-18">visibility</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+    </div>
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+      <p style="color: rgb(230, 230, 230)">Please Wait. </p>  
+    </ngx-spinner> 
+    <button class="btn btn-primary   glyph bt-sm float-right" style='margin-right: 100px;cursor: pointer;'
+    (click)='back()'>Back</button>
+  </div>
+   <!--Order Items Grid View popup-->
+<div class="modal fade" id="orderItemsModel">
+  <div class="modal-dialog modal-dialog-centered modal-xl" data-keyboard="false" data-backdrop="satic">
+      <div class="modal-content ">
+          <div class="modal-header bg-success" style='padding: 6px;margin-bottom: 8px;'>
+              <h4 style="margin: 0px;color: white;" id="m_title" class='modal_title'></h4>
+              <button (click)='close()' class="close ,pull-right" data-dismiss="modal"
+                  style="color: white;outline: none;font-weight: 400;">
+                  &times;
+              </button>
+          </div>
+          <div class="modal-body">
+              <!--order Items Grid view table-->
+              <div class='container'>
+                  <!--Customer Detail Table-->
+                  <table class="table table-bordered
+                      table-hover
+                      table-stripped
+                      table-condensed">
+                  <thead style="background-color: rgb(173, 175, 177);color: white;">
+                      <tr>
+                          <th>OrderCode</th>
+                          <th>Customer Name</th>
+                          <th>Cpontact No</th>
+                          <th>Order Date</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor='let item of customerData;let i= index'>
+                          <td style="padding: 2px;">{{item.orderCode}}</td>
+                          <td style="padding: 2px;">{{item.name}}</td>
+                          <td style="padding: 2px;">{{item.contactNo}}</td>
+                          <td style="padding: 2px;">{{item.orderdate|date:short}}</td>
+                          
+                      </tr>
+                  </tbody>
+              </table>
+               <!--Order Item Details Table-->
+                  <table class="table table-bordered
+                      table-hover
+                      table-stripped
+                      table-condensed">
+                      <thead style="background-color: rgb(173, 175, 177);color: white;">
+                          <tr>
+                              <th>S.No</th>
+                              <th>Product Name</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                              <th>total</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor='let item of orderItemsarray;let i= index'>
+                              <td style="padding: 2px;">{{i+1}}</td>
+                              <td style="padding: 2px;">{{item.name}}</td>
+                              <td style="padding: 2px;">{{item.quantity}}</td>
+                              <td style="padding: 2px;">{{item.price}}</td>
+                              <td style="padding: 2px;">{{item.total}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button id="close_btn_title"  class="btn btn-primary btn-sm "
+                  >Total:&nbsp;{{totalAmount}}.00</button>
+              <button id="close_btn_title" (click)='close()' class="btn btn-danger btn-sm "
+                  data-dismiss="modal">close</button>
+          </div>
+      </div>
+  </div>
+</div>

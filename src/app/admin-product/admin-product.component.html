@@ -1,0 +1,230 @@
+<div class='container'>
+  <table class='selectboxtable' width='100%'>
+    <tr>
+      <td style="width:280px">
+        <label>Select your Item:</label>
+        <select class='selectpicker' data-style="btn-info" id='selectItemid' [(ngModel)]='queryParms.id'>
+          <option value="{{'0'}}" selected>All</option>
+          <option *ngFor='let item of selectItems' value="{{item.id}}">{{item.name}}</option>
+        </select>
+      </td>
+      <td style="width:280px">
+        <label>Select Vendor:</label>
+        <select class='selectpicker' data-style="btn-info" id='selectVendar' [(ngModel)]="queryParms.vendarId" (change)='GetProducts($event)'>
+          <option value="{{'0'}}" selected>All</option>
+          <option *ngFor='let item of vendarRecords' value="{{item.id}}">{{item.name}}</option>
+        </select>
+      </td>
+      <td style="width:280px">
+        <label>Select Category:</label>
+        <select class='selectpicker' data-style="btn-info" id='selectCategory' [(ngModel)]="queryParms.categoryId" (change)='GetProducts($event)'>
+          <option value="{{'0'}}" selected>All</option>
+          <option *ngFor='let item of categoryRecords' value="{{item.id}}">{{item.name}} </option>
+        </select>
+      </td>
+      <td>
+        <button
+          style='background-color: #b0e0e6;margin-top: 28px;padding: 4px 6px;border-color: rgb(49, 47, 47);color: black;'
+          class="btn btn-info" (click)='SearchItem()'>Go</button>
+      </td>
+    </tr>
+  </table>
+</div>
+<!--grid view-->
+<div class='container'>
+  <button title='Add Product'class="btn btn-success  glyph bt-sm float-right" (click)="OpenPopup(0)">
+    +
+  </button>
+  <div>
+    <table class="table table-bordered
+        table-hover
+        table-stripped
+        table-condensed">
+      <thead style="background-color: rgb(22, 155, 22);color: white;">
+        <tr>
+          <th>S.no</th>
+          <th>Item Name</th>
+          <th>Quantity</th>
+          <th>Unit/Price</th>
+          <th>Vendor</th>
+          <th>Category</th>
+          <th>Edit/Delete/status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor='let item of productRecords|paginate:config;'>
+          <td>{{item.sno}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.quantity}} {{item.units}}</td>
+          <td>{{item.unitPrice}}</td>
+          <td>{{item.vendar_Name}}</td>
+          <td>{{item.category_Name}}</td>
+          <td>
+            <button style='outline: none;border: none;' class='mat-icon-button' (click)="OpenPopup(item)">
+              <mat-icon color="primary" class="mat-18">edit</mat-icon>
+            </button>
+
+            <button style='outline: none;border: none;' class='mat-icon-button' (click)="Delete(item.id)">
+              <mat-icon color="warn" class="mat-18 deleteIcon">delete</mat-icon>
+            </button>
+            <!--status button-->
+            <button *ngIf="item.isActive=='0'" title='Active' style='outline: none;border: none;cursor: pointer;'
+              class='mat-icon-button' (click)="ProductStatus(item.id,1)">
+              <mat-icon color="btn-success" class="mat-18">done</mat-icon>
+            </button>
+            <button *ngIf="item.isActive=='1'" title='InActive' style='outline: none;border: none;cursor: pointer;'
+              class='mat-icon-button' (click)="ProductStatus(item.id,0)">
+              <mat-icon color="warn" class="mat-18">close</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: white">Please Wait. </p>  
+  </ngx-spinner>  
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="productModal">
+  <div class="modal-dialog  modal-dialog-centered modal-md" data-keyboard="false" data-backdrop="satic">
+    <div class="modal-content modal-md">
+      <!-- Modal Header -->
+      <div class="modal-header" style="background-color: forestgreen;
+      padding: 6px;
+      margin-bottom: 8px;">
+        <h4 style="margin: 0px;color: white;" id='m_title' class="modal-title"></h4>
+        <button (click)='close()' class="close" data-dismiss="modal"
+          style="color: white;outline: none;">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-md">
+        <form [formGroup]="productData" novalidate>
+          <div class="row col-sm-12">
+            <!--Product name input box-->
+            <div class="col-sm-6 form-group ">
+              <label>Product name</label>
+              <input type="text" id="m_name" class="form-control" [(ngModel)]="product.name" formControlName="name"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('name').hasError('required')}">
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('name').hasError('required')&& productData.get('name').dirty">
+                *Product name is required.
+              </div>
+              <div style='color:red' *ngIf=" productData.controls['name'].hasError('pattern')&& productData.get('name').dirty">
+                *enter the valid name.
+              </div>
+              <div style='color:red'
+                *ngIf="productData.controls['name'].touched && productData.controls['name'].hasError('maxlength')&& productData.get('name').dirty">
+                *name valid with in 20 charecters.
+              </div>
+            </div>
+            <!--Product DateOfPurchage-->
+            <div class="col-sm-6 form-group ">
+              <label>Product DateOfPurchage</label>
+              <input type="date" id="m_DateOfPurchage" class="form-control" [(ngModel)]="product.dateOfPurchage"
+                formControlName="dateOfPurchage"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('dateOfPurchage').hasError('required')}">
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('dateOfPurchage').hasError('required')&& productData.get('dateOfPurchage').dirty ">
+                Product dateOfPurchage is required.
+              </div>
+            </div>
+          </div>
+          <!--Product Category-->
+          <div class="row col-sm-12">
+            <div class="col-sm-6 form-group ">
+              <label>Product Category</label>
+              <select [disabled]='' type="text" id="m_categoryId" class="form-control" [(ngModel)]="product.categoryId"
+                formControlName="categoryId"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('categoryId').hasError('required')}">
+                <option value=null >Choose Category</option>
+                <option *ngFor="let item of categoryRecords" value="{{item.id}}">{{item.name}}
+                </option>
+              </select>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('categoryId').hasError('required')&& productData.get('categoryId').dirty">
+                Product Category is required.
+              </div>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('categoryId').hasError('pattern')&& productData.get('categoryId').dirty">
+                Product Category is valid at 18-60.
+              </div>
+            </div>
+            <!--Product vendar-->
+            <div class="col-sm-6 form-group ">
+              <label>Product Vendor</label>
+              <select type="number" id="m_vendarId" class="form-control" [(ngModel)]="product.vendarId"
+                formControlName="vendarId"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('vendarId').hasError('required')}">
+                <option value=null selected disabled>Choose Vendar</option>
+                <option *ngFor="let item of vendarRecords" value="{{item.id}}">{{item.name}}</option>
+              </select>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('vendarId').hasError('required')&& productData.get('vendarId').dirty">
+                *Product Vendor is required.
+              </div>
+            </div>
+          </div>
+          <!--Product Quantity-->
+          <div class="row col-sm-12">
+            <div class="col-sm-6 form-group ">
+              <label>Product Quantity</label>
+              <input type="number" id="m_quantity" class="form-control" [(ngModel)]="product.quantity"
+                formControlName="quantity"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('quantity').hasError('required')}">
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('quantity').hasError('required')&& productData.get('quantity').dirty">
+                *Product Quantity Number is required.
+              </div>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('quantity').hasError('pattern')&& productData.get('quantity').dirty">
+                *Enter the Quantity Number.
+              </div>
+            </div>
+            <!--Product Units-->
+            <div class="col-sm-6 form-group ">
+              <label>Product Units</label>
+              <select id="m_units" class="form-control" [(ngModel)]="product.units" formControlName="units"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('units').hasError('required')}">
+                <option value=''>--Choose Units--</option>
+                <option value='Liter'>Liter</option>
+                <option value='Kg'>Kg</option>
+                <option value='Bag'>Bag</option>
+                <option value='item'>Item</option>
+              </select>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('units').hasError('required')&& productData.get('units').dirty">
+                *Product Units is required.
+              </div>
+            </div>
+          </div>
+          <!--Product UnitPrice-->
+          <div class="row col-sm-12">
+            <div class="col-sm-6 form-group ">
+              <label>Product UnitPrice</label>
+              <input type="number" id="m_unitPrice" class="form-control" [(ngModel)]="product.unitPrice"
+                formControlName="unitPrice"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('unitPrice').hasError('required')}">
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('unitPrice').hasError('required')&& productData.get('unitPrice').dirty">
+                *Product UnitPrice is required.
+              </div>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('unitPrice').hasError('pattern')&& productData.get('unitPrice').dirty">
+                *Enter the valid UnitPrice.
+              </div>
+            </div>
+            <!--Product descroption-->
+            <div class="col-sm-6 form-group ">
+              <label>Product Description</label>
+              <textarea id="m_description" formControlName="description" class="form-control"
+                [(ngModel)]="product.description"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && productData.get('description').hasError('required')}"></textarea>
+              <div style='color:red' *ngIf="isFormSubmitted && productData.get('description').hasError('required')&& productData.get('description').dirty">
+                *Product name is required.
+              </div>
+            </div>
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="submit" id='btn_title' class="btn btn-success" (click)='InsertUpdate()'></button>
+            <button type="button" id='btn_close_title' (click)='close()' class="btn btn-danger"
+              data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

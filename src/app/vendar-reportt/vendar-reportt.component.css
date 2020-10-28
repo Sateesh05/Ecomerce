@@ -1,0 +1,15 @@
+.selectpicker{
+    padding: 6px;
+    width: 180px;
+    background-color: powderblue;
+    border-color: azure;
+}
+.bgcolor{
+    background-color: powderblue;
+    border-color: azure;
+}
+.inputbox{
+    padding: 4px;
+    border: aliceblue;
+    outline: none;
+}

@@ -1,0 +1,93 @@
+<div class='container'>
+  <button class="btn btn-success  glyph bt-sm float-right "(click)='OpenPopup(0)'>
+    +
+  </button>
+<div class="table-responsive-sm">
+      <table class="table table-bordered
+                      table-hover
+                      table-stripped
+                      table-condensed">
+        <thead class="bg-success">
+          <tr>
+            <th>S.NO</th>
+            <th>Vendor Name</th>
+            <th>Description</th>
+            <th>Edit/Delete</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let item of vendarRecords|paginate:config;'>
+            <td>{{item.sno}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.description}}</td>
+            <td>
+              <button style='outline: none;border: none;' class='mat-icon-button' (click)="OpenPopup(item)">
+                <mat-icon color="accent" class="mat-18">edit</mat-icon>
+              </button>
+              <button style='outline: none;border: none;' class='mat-icon-button' (click)="delete(item.id)">
+                <mat-icon color="warn" class="mat-18 deleteIcon">delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+    </div>
+  </div>
+  <!--vendar popup model-->
+  <!--popup model-->
+  <div class="modal fade" id="vendarModal">
+    <div class="modal-dialog modal-dialog-centered modal-md" data-keyboard="false" data-backdrop="satic">
+      <div class="modal-content ">
+        <div class="modal-header bg-success" style='padding: 6px;margin-bottom: 8px;'>
+          <h4 style="margin: 0px;color: white;"id="m_title" class='modal_title'></h4>
+          <button (click)='close()' class="close ,pull-right" data-dismiss="modal" style = "color: white;outline: none;font-weight: 400;">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <!--insert form-->
+          <form [formGroup]="vendarData" novalidate>
+            <div class="row col-sm-12">
+              <!--Department name input box-->
+              <div class="col-sm-6 form-group ">
+                <label>Vendor Name </label>
+                <input type="text" id="m_name" class="form-control" [(ngModel)]="vendar.name"
+                  formControlName="name"
+                  [ngClass]="{'txtBdrColor':isFormSubmitted && vendarData.get('name').hasError('required')}">
+                <div style='color:rgb(255, 38, 0);' *ngIf="isFormSubmitted && vendarData.get('name').hasError('required') && vendarData.get('name').dirty ">
+                  *Vendor Name is Required.
+                </div>
+                <div style='color:rgb(255, 38, 0);' *ngIf="isFormSubmitted && vendarData.get('name').hasError('maxlength') && vendarData.get('name').dirty ">
+                  *Vendor Name maxlength is 20 charectors.
+                </div>
+              </div>
+            </div>
+            <div class="row col-sm-12">
+              <!--DepartmentDescription input box-->
+              <div class="col-sm-10 form-group">
+                <label>Description</label>
+                <textarea type="text" id="m_description" class="form-control" [(ngModel)]="vendar.description"
+                  formControlName="description"
+                  [ngClass]="{'txtBdrColor':isFormSubmitted && vendarData.get('description').hasError('required')}"></textarea>
+                <div style='color:rgb(255, 38, 0);'
+                  *ngIf="isFormSubmitted && vendarData.get('description').hasError('required')  && vendarData.get('description').dirty">
+                  *Description is Required.
+                </div>
+                <div style='color:rgb(255, 38, 0);' *ngIf="isFormSubmitted && vendarData.get('description').hasError('maxlength') && vendarData.get('description').dirty ">
+                  *Vendar description maxlength is 100 charectors.
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id='btn_title' class="btn btn-success btn-sm " (click)="InsertUpdate()"></button>
+  
+          <button id="close_btn_title" (click)='close()' class="btn btn-danger btn-sm "
+            data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+  </div>

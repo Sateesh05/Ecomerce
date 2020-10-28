@@ -1,0 +1,29 @@
+export class product {
+    sno:number;
+    id:number;
+    name:string;
+    description:string;
+    vendarId:number;
+    vendar_Name:string;
+    categoryId:number;
+    category_Name:string;
+    quantity:number;
+    units:string;
+    unitPrice:number;
+    dateOfPurchage:Date;
+    isactive:boolean;
+    itemId:number;
+    contact:string;
+    email:string;
+    customQuantity:number;
+    total:number;
+    contactNo:number;
+    orderdate:Date;
+    grandTotal:number;
+    toDate:any;
+    fromDate:any;
+    productId:number;
+    customerCount:number;
+    productCount:number
+
+}

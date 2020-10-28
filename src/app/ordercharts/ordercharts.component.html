@@ -1,0 +1,22 @@
+<div class='container'>
+  <label><b>Select Year:</b></label>
+    <select class='selectYear' data-style="btn-info" id='selectYear' [(ngModel)]="selectYear" (change)='GetYear($event)'>
+      <option value="2020" selected>2020</option>
+      <option value="2021" selected>2021</option>
+      <option value="2022" selected>2022</option>
+      <option value="2023" selected>2023</option>
+    </select>
+  <div style="width: 80%;">
+    <canvas
+        baseChart
+        [chartType]="'line'"
+        [datasets]="chartData"
+        [labels]="chartLabels"
+        [options]="chartOptions"
+        [legend]="true"
+        (chartClick)="onChartClick($event)">
+    </canvas>
+  </div>
+  <button class="btn btn-primary   glyph bt-sm float-right" style='margin-right: 100px;cursor: pointer;background-color: hotpink;border-color: hotpink;'
+    (click)='back()'>Back</button>
+</div>

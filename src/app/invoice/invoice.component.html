@@ -1,0 +1,81 @@
+<div class='container'>
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+        <p style="color: white">Please Wait. </p>  
+      </ngx-spinner>
+    <div class='header'>
+        <h3 class='title'>Invoice</h3>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h3 style='text-align: end;
+                    font-style: italic;'>Universal General Store</h3>
+                </td>
+                <td>
+                 <img src ='assets/images/OIP.jpg' width='150px' hight='60px'alt='shop logo'>
+               </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class='container' #htmlData>
+    <div class="column">
+        <p style='margin: 0px;'>universal general store pvt.ltd</p>
+        <p style='margin: 0px;'>Edujarlapalle vilage,</p><span>middle street,</span>&nbsp;<span>wazeed mandal</span>
+        <p style='margin-top: 0px;'>ph:9554736455</p>
+    </div>
+    <div class="column" *ngFor='let item Of customerDetail'>
+        <p style='margin: 0px;'>invoice:&nbsp;{{item.orderCode}}</p>
+        <p style='margin: 0px;'>Customer name:&nbsp;{{item.name}}</p>
+        <p style='margin: 0px;'>Customer Contact No:&nbsp;{{item.contactNo}}</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>S.NO</th>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Line Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor='let item of orderItems;let i= index'>
+                <td>{{i+1}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.total}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style='max-width: 100%;'>
+        <div style='position: relative;width: 82%;
+                position: relative;
+                text-align: end;
+                font-size: 20px;'>
+            <p style='margin-top: 3px;margin-right: 5px;text-decoration: underline'>SubTotal:&nbsp;{{subtotal}}.00</p>
+        </div>
+    </div>
+    
+    <!--footer-->
+    <div>
+        <p style="margin: 0px;
+       background-color: darkgray;
+       text-align: center;"><b>Email:</b>customercare@universal.in</p>
+        <p style="text-align: center;font-size: 21px;
+       font-style: oblique;">*****Visit Again*****</p>
+
+    </div>
+</div>
+<div class='container'>
+    <button class="btn btn-primary   glyph bt-sm float-right" style='margin-right: 100px;cursor: pointer;'
+        [routerLink]= "['customarPortal']">Back</button>
+    <button class="btn btn-success   glyph bt-sm float-right" style='margin-right: 13px;cursor: pointer;'
+        (click)="openPDF()">openPDF</button>
+    <button class="btn btn-success   glyph bt-sm float-right" style='margin-right: 13px;cursor: pointer;'
+        (click)="downloadPDF()">downloadPDF</button>
+        
+</div>
+ 

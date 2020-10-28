@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~bootstrap/dist/css/bootstrap.min.css';
+.txtBdrColor{
+ border-color: red;
+}
+.txtColor{
+ color:red;
+}
+.ng-valid,
+.ng-valid.required {
+  border-color: rgb(99, 235, 99);
+}

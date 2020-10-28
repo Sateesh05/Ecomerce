@@ -1,0 +1,132 @@
+<h4 style='text-align: center;color:gray;margin:6px 0px 0px 0px;text-decoration: underline'>Create Order</h4><br>
+<div class=' createOrderTbl'>
+    <table class='container ' [formGroup]="createOrderData" novalidate>
+        <td class="form-group">
+            <label class='orderBox'><b>Customer Name:&nbsp;</b></label>
+            <input type='text' class="form-control" formControlName='name' [(ngModel)]='createOrder.name'
+                [ngClass]="{'txtBdrColor':isFormSubmitted && createOrderData.get('name').hasError('required')}">
+            <div style='color:red'
+                *ngIf="isFormSubmitted && createOrderData.get('name').hasError('required')&&createOrderData.get('name').dirty">
+                *Customar name is required.
+            </div>
+        </td>
+        <td class="form-group">
+            <label class='orderBox'><b>Contact No:&nbsp;</b></label>
+            <input type='text' class="form-control" formControlName="contactNo" [(ngModel)]='createOrder.contactNo'
+                [ngClass]="{'txtBdrColor':isFormSubmitted && createOrderData.get('contactNo').hasError('required')}">
+            <div style='color:red'
+                *ngIf="isFormSubmitted && createOrderData.get('contactNo').hasError('required')&&createOrderData.get('contactNo').dirty">
+                *invalid mobile number.
+            </div>
+            <div style='color:red' *ngIf=" createOrderData.controls['contactNo'].hasError('pattern')">
+                *enter the valid mobile Number.
+            </div>
+        </td>
+        <td class="form-group">
+            <label class='orderBox'><b>Order Date:&nbsp;</b></label>
+            <input type='date' class="form-control" formControlName="orderdate" [(ngModel)]="createOrder.orderdate"
+                [ngClass]="{'txtBdrColor':isFormSubmitted && createOrderData.get('orderdate').hasError('required')}">
+        </td>
+    </table>
+</div>
+<h4 style='text-align: center;color:gray;margin:6px 0px ;text-decoration: underline'>Order Items&nbsp;<mat-icon>shopping_cart</mat-icon>
+</h4>
+<div class='container responsive'>
+    <table width='70%' class='responsive'>
+        <tr>
+            <!--search Box-->
+            <td class="form-group">
+                <div class="Searchcontainer">
+                    <input class="form-control" type="text" placeholder=' Search...' class='search js-search'
+                        [(ngModel)]="term">
+                    <mat-icon class='searchIcon'>search</mat-icon>
+                </div>
+            </td>
+            <!--select Item-->
+            <td class="form-group">
+                <label class='label'><b>Select Item:</b></label><br>
+                <select class="form-control" id='name' name='name' (change)="onKeyUpEvent($event)" type='text'
+                    class='controler selectwidth'>
+                    <option value=''>Select your Product</option>
+                    <option *ngFor='let item of productRecords| filter:term;' value="{{item.id}}">{{item.name}}</option>
+                </select>
+            </td>
+            <!--Instack-->
+            <td class="form-group">
+                <label><b>Instock:</b></label><br>
+                <input class="form-control controler width" id='' *ngFor='let it of productFields' type='text'
+                    value='{{it.quantity}}{{it.units}}' readonly placeholder="unitPrice">
+
+            </td>
+            <!--Quantity-->
+            <td class="form-group">
+                <label><b>Quantity:</b></label><br>
+                <div class='cart-info quantity'>
+                    <button class="btn-increment-decrement" (click)="decrement_quantity()">-</button>
+                    <input class="input-quantity" id='quantity' id='input-quantity-3DcAM01' name='Qntityvalue'
+                        value='Qntityvalue' [(ngModel)]='Qntityvalue' type='text' min="1"
+                        oninput="validity.valid||(value='');" class='width'
+                        style='border: none;width: 27px;outline: none'>
+
+                    <button class="btn-increment-decrement" (click)="increment_quantity()">+</button>
+                </div>
+            </td>
+            <!--Unit/Price-->
+            <td class="form-group">
+                <label><b>Unitprice:</b></label><br>
+                <div *ngFor='let it of productFields'>
+                    <input class="form-control controler width" id='unitPrice' name='unitPrice' type='text'
+                        placeholder="unitPrice" value='{{it.unitPrice}}' readonly>
+                </div>
+            </td>
+            <td><br>
+                <button (click)='addsoldItemsFn()' class='btn'>Add</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<br>
+<div class='container'>
+    <table class="table table-bordered
+    table-hover
+    table-stripped
+    table-condensed">
+        <thead style="background-color: rgb(80, 176, 255);color: white;">
+            <tr>
+                <th>S.No</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor='let item of soldItemsArray;let i= index'>
+                <td style="padding: 2px;">{{i+1}}</td>
+                <td style="padding: 2px;">{{item.name}}</td>
+                <td style="padding: 2px;">{{item.customQuantity}}</td>
+                <td style="padding: 2px;">{{item.unitPrice}}</td>
+                <td style="padding: 2px;">{{item.total}}</td>
+                <td style="padding: 2px;">
+                    <button title='Remove Item'
+                        style='outline: none;border: none;cursor: pointer; border-block-color: #2f2f2f;'
+                        class='mat-icon-button' (click)='RemoveItem(item.id)'>
+                        <mat-icon class="mat-18">delete</mat-icon>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class='container'>
+        <tr>
+            <td *ngIf='isSowPyabtn'>
+                <button class='proceed-btn' (click)='OrderSubmition()'>Proceed To Pay=></button>
+
+                <label class="float-right"><b>Grand Total:</b><input type='text' value='0.00' [(ngModel)]='grandTotal'
+                        style="text-align:center;margin-left: 3px;" readonly></label>
+            </td>
+        </tr>
+    </table>
+</div>

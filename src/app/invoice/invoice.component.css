@@ -1,0 +1,32 @@
+.header{
+background-color:darkgray
+}
+.title{
+    text-align: center;
+    color: white;
+    padding: 4px 6px;
+    font-style: oblique;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th{
+      background-color: darkgray;
+      color: white;
+  }
+  .column{
+      float: left; 
+      width:50%;
+      padding: 15px;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  hr.new5 {
+    /*border: 8px solid rgb(130, 155, 238);*/
+    border-radius: 5px;
+  }
